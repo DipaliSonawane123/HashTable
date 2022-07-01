@@ -1,24 +1,25 @@
 package com.hashtable;
 import java.util.ArrayList;
-// methods for Hash table features.
-class MyHashMap <K, V> {
+public class MyHashTable <K, V> {
+
     MyMapNode<K, V> head;
     MyMapNode<K, V> tail;
     private final int numOfBuckets;
     ArrayList<MyMapNode<K, V>> myBucketArray;
 
-    public MyHashMap() {
-        this.numOfBuckets = 10;
+    // default constructor
+    public MyHashTable() {
+        this.numOfBuckets = 20;  //20 is assigned a little more than the numbers of total words
         this.myBucketArray = new ArrayList<>(numOfBuckets);
-        // Create empty LinkedLists
+
+       //  Create empty LinkedLists
+
         for (int i = 0; i < numOfBuckets; i++)
             this.myBucketArray.add(null);
     }
 
-    // method to get value from LinkedList using index number
-    // key : key is returned
-
-
+   // method to get value from LinkedList using index number
+     //key : key is returned
     public V get(K key) {
         int index = this.getBucketIndex(key);
         if (this.myBucketArray.get(index) == null)
@@ -27,12 +28,11 @@ class MyHashMap <K, V> {
         return (myNode == null) ? null : myNode.getValue();
     }
 
-   // Method to search the word in LinkedList
+   //Method to search the word in LinkedList
     // key : key to search
-
-
     public MyMapNode<K, V> search(K key) {
         MyMapNode<K, V> currentNode = head;
+
         while (currentNode != null) {
             if (currentNode.getKey().equals(key)) {
                 return currentNode;
@@ -43,13 +43,13 @@ class MyHashMap <K, V> {
         return currentNode;
     }
 
-    //Method to add key and value to hash table
-    // key    : word to be added
-     //value: frequency of word
-
+   // Method to add key and value to hash table
+    //key : word to be added
+     // value: frequency of word
     public void add(K key, V value) {
         int index = this.getBucketIndex(key);
         MyMapNode<K, V> myNode = this.myBucketArray.get(index);
+
         if (myNode == null) {
             myNode = new MyMapNode<>(key, value);
             this.myBucketArray.set(index, myNode);
@@ -62,18 +62,14 @@ class MyHashMap <K, V> {
             myNode.setValue(value);
     }
 
-    /**
-     * this implements hash function to find index for a key
-     */
+    // implements hash function to find index for a key
     public int getBucketIndex(K key) {
         int hashCode = Math.abs(key.hashCode());
         int index = hashCode % numOfBuckets;
-        ////System.out.println("Key: "+word+" hashcode: "+hashCode+" index: "+index);
         return index;
-
     }
-    // Method to append value to Linked List
-    // myNode : value to append
+
+   // Method to append value to Linked List
     private void append(MyMapNode<K, V> myNode) {
         if (this.head == null)
             this.head = myNode;
@@ -84,6 +80,25 @@ class MyHashMap <K, V> {
             this.tail = myNode;
         }
     }
+
+    // Method to remove a word
+   //  key : word to be removed
+    public void remove(K key) {
+        MyMapNode<K, V> currentNode = head;
+        MyMapNode<K, V> previousNode = null;
+        while (currentNode != null && currentNode.getKey().equals(key)) {
+            head = currentNode.getNext();
+        }
+        while (currentNode != null && !(currentNode.getKey().equals(key))) {
+            previousNode = currentNode;
+            currentNode = currentNode.getNext();
+        }
+        if (currentNode != null)
+            previousNode.next = currentNode.next;
+        if (currentNode == null)
+            System.out.println("Word not found");
+    }
+
     @Override
     public String toString() {
         return "MyHashMapNodes{" + head + '}';
